@@ -64,13 +64,45 @@ $ sudo npm install --unsafe-perm=true --allow-root
 
 ## Instructions:
 
-### Step 1 - Registering
+### Registering
 
 Do a post request at `https://localhost:3000/user/` with proper data to register a user.:
 
-### Step 2 - Login 
+### Login 
 
 Do a post request at `https://localhost:3000/user/login` with valid credentials
+
+### Profile 
+
+Do a post request at `https://localhost:3000/user/me` with valid credentials
+
+### Logout
+
+Do a post request at `https://localhost:3000/user/logout` with valid credentials
+
+### View all cars
+
+Do a post request at `https://localhost:3000/user/car/all` with valid credentials
+
+### View available cars 
+
+Do a post request at `https://localhost:3000/user/car/available` with valid credentials
+
+### Book A car 
+
+Do a post request at `https://localhost:3000/user/car/book/:{id}` with valid credentials
+
+### View A particular Car 
+
+Do a post request at `https://localhost:3000/user/car/:{id}` with valid credentials
+
+### Update Booking 
+
+Do a post request at `https://localhost:3000/user/car/update/:{id}` with valid credentials
+
+### Delete a Booking 
+
+Do a post request at `https://localhost:3000/user/car/delete/:{id}` with valid credentials
 
 ---
 
