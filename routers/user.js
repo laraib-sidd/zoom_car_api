@@ -31,7 +31,7 @@ router.post('/user/login', async (req, res) => {
             token
         })
     } catch (e) {
-        res.status(400).send()
+        res.status(400).send(e)
     }
 })
 
@@ -49,15 +49,6 @@ router.post('/user/logout', auth, async (req, res) => {
     }
 })
 
-router.post('/user/logoutAll', auth, async (req, res) => {
-    try {
-        req.user.tokens = []
-        await req.user.save()
-        res.send()
-    } catch (e) {
-        res.status(500).send()
-    }
-})
 
 // Get user profile
 router.get('/user/me', auth, (req, res) => {
@@ -91,9 +82,9 @@ router.patch('/user/me', auth, async (req, res) => {
 router.delete('/user/me', auth, async (req, res) => {
     try {
         await req.user.remove()
-        sendCancellationEmail(req.user.name, req.user.email)
         res.send(req.user)
     } catch (e) {
+        console.log(e)
         res.status(500).send(e)
     }
 })
