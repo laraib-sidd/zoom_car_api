@@ -1,0 +1,29 @@
+{
+  "name": "zoom_car_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.18",
+    "nodemon": "^2.0.6",
+    "validator": "^13.5.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laraib-sidd/zoom_car_api.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/laraib-sidd/zoom_car_api/issues"
+  },
+  "homepage": "https://github.com/laraib-sidd/zoom_car_api#readme"
+}
