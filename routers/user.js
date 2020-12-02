@@ -85,27 +85,41 @@ router.delete('/user/me', auth, async (req, res) => {
         await req.user.remove()
         res.send(req.user)
     } catch (e) {
-        console.log(e)
+
         res.status(500).send(e)
     }
 })
 
 // All cars
 router.get('/user/car/all', auth, async (req, res) => {
-    const cars = await Car.find()
-    res.send(cars)
+    try {
+        const cars = await Car.find()
+        res.send(cars)
+    } catch (e) {
+        res.status(500).send(e)
+    }
 })
 
 // All available cars
 router.get('/user/car/available', auth, async (req, res) => {
-    const cars = await Car.find({
-        "available": true
-    })
-    res.send(cars)
+    try {
+        const cars = await Car.find({
+            "available": true
+        })
+        res.send(cars)
+    } catch (e) {
+        res.status(500).send("No Avaiable Cars")
+    }
 })
 
 // Book a Car
 router.post('/user/car/book/:_id', auth, async (req, res) => {
+    const isAvailable = await Car.findById(req.params._id)
+    if (!isAvailable) {
+        return res.status(500).send({
+            error: "Sorry the car is not available at the moment"
+        })
+    }
     try {
         const car = await Car.findByIdAndUpdate(req.params._id, {
             "available": false,
@@ -122,29 +136,53 @@ router.post('/user/car/book/:_id', auth, async (req, res) => {
 
 // Get a particular Car
 router.get('/user/car/:_id', auth, async (req, res) => {
-    const car = await Car.findById(req.params._id)
-    res.send(car)
+    try {
+        const car = await Car.findById(req.params._id)
+        res.send(car)
+    } catch (e) {
+        res.status(500).send("Car Not found")
+    }
 })
 
 // Update the booking
 router.patch('/user/car/update/:_id/:hours', auth, async (req, res) => {
-    const car = await Car.findByIdAndUpdate(req.params._id, {
-        'bookingHours': req.params.hours
-    })
-    await car.save()
-    res.send("Booking is updated")
+    const carFound = await Car.findById(req.params._id)
+    if (!carFound) {
+        return res.status(500).send({
+            error: "Car Not Found"
+        })
+    }
+    try {
+        const car = await Car.findByIdAndUpdate(req.params._id, {
+            'bookingHours': req.params.hours
+        })
+        await car.save()
+        res.send("Booking is updated")
+    } catch (e) {
+        res.status(500).send("Car Not Found")
+    }
 })
 
 // Delete A booking
 router.patch('/user/car/delete/:_id', auth, async (req, res) => {
-    const car = await Car.findByIdAndUpdate(req.params._id, {
-        "available": true,
-        "owner": null,
-        "bookingHours": null,
-        "bookedAt": null
-    })
-    await car.save()
-    res.send('Booking Deleted')
+    const carFound = await Car.findById(req.params._id)
+    if (!carFound) {
+        return res.status(500).send({
+            error: "Car Not Found"
+        })
+    }
+    try {
+        const car = await Car.findByIdAndUpdate(req.params._id, {
+            "available": true,
+            "owner": null,
+            "bookingHours": null,
+            "bookedAt": null
+        })
+        await car.save()
+        res.send('Booking Deleted')
+    } catch (e) {
+        res.status(500).send("Car Not Found")
+    }
 })
 
 module.exports = router;
