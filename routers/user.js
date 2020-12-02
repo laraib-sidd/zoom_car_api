@@ -1,6 +1,7 @@
 const express = require('express');
 const User = require('../models/user');
 const auth = require('../middleware/auth');
+const Car = require('../models/car')
 
 const router = express.Router()
 
@@ -87,6 +88,63 @@ router.delete('/user/me', auth, async (req, res) => {
         console.log(e)
         res.status(500).send(e)
     }
+})
+
+// All cars
+router.get('/user/car/all', auth, async (req, res) => {
+    const cars = await Car.find()
+    res.send(cars)
+})
+
+// All available cars
+router.get('/user/car/available', auth, async (req, res) => {
+    const cars = await Car.find({
+        "available": true
+    })
+    res.send(cars)
+})
+
+// Book a Car
+router.post('/user/car/book/:_id', auth, async (req, res) => {
+    try {
+        const car = await Car.findByIdAndUpdate(req.params._id, {
+            "available": false,
+            "owner": req.user._id,
+            "bookingHours": req.body.hours
+        })
+        await car.save()
+        res.send("Booking is confirmed")
+    } catch (e) {
+        console.log(e)
+        res.status(401).send()
+    }
+})
+
+// Get a particular Car
+router.get('/user/car/:_id', auth, async (req, res) => {
+    const car = await Car.findById(req.params._id)
+    res.send(car)
+})
+
+// Update the booking
+router.patch('/user/car/update/:_id/:hours', auth, async (req, res) => {
+    const car = await Car.findByIdAndUpdate(req.params._id, {
+        'bookingHours': req.params.hours
+    })
+    await car.save()
+    res.send("Booking is updated")
+})
+
+// Delete A booking
+router.patch('/user/car/delete/:_id', auth, async (req, res) => {
+    const car = await Car.findByIdAndUpdate(req.params._id, {
+        "available": true,
+        "owner": null,
+        "bookingHours": null,
+        "bookedAt": null
+    })
+    await car.save()
+    res.send('Booking Deleted')
 })
 
 module.exports = router;
