@@ -5,6 +5,12 @@ const Car = require('../models/car')
 
 const router = express.Router()
 
+router.get('/', (req, res) => {
+    res.send({
+        API: "ZOOM_CAR_API"
+    })
+})
+
 // User Endpoints
 // Create User
 router.post('/user', async (req, res) => {
@@ -90,6 +96,8 @@ router.delete('/user/me', auth, async (req, res) => {
     }
 })
 
+
+// Car Endpoints
 // All cars
 router.get('/user/car/all', auth, async (req, res) => {
     try {
